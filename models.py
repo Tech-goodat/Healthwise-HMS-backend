@@ -32,3 +32,22 @@ class Docs(db.Model, SerializerMixin):
     
     def __repr__(self):
         return f'<Docs {self.id}, {self.username}, {self.email}, {self.department}, {self.description}, {self.phone_number}, {self.profile_picture}, {self.password}, {self.created_at}>'
+    
+class Client(db.Model, SerializerMixin):
+    __tablename__='clients'
+    id=db.Column(db.Integer, primary_key=True)
+    username=db.Column(db.String)
+    email=db.Column(db.String)
+    phone_number=db.Column(db.String)
+    age=db.Column(db.Integer)
+    gender=db.Column(db.String)
+    created_at=db.Column(db.DateTime, server_default=db.func.now())
+
+    @validates('email')
+    def validate_email(self, key, email):
+        if '@' not in email:
+            raise ValueError('invail email address')
+        return email
+    def __repr__(self):
+        return f'<Client {self.id}, {self.username}, {self.email}, {self.phone_number}, {self.created_at}>'
+    
