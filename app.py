@@ -129,7 +129,7 @@ class Programs(Resource):
     
 #Expose client profile api
 class ClientProfile(Resource):
-    # @jwt_required()
+    @jwt_required()
 
     def get(self, email):
         client=Client.query.filter_by(email=email).first()
