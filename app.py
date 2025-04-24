@@ -78,7 +78,8 @@ class DocLogin(Resource):
             profile_picture=doctor.profile_picture,
             access_token=access_token
         ), 200)
-    
+
+# Client Signup route
 class ClientSignup(Resource):
     @jwt_required()
     def post(self):
@@ -94,15 +95,25 @@ class ClientSignup(Resource):
         db.session.commit()
 
         new_user_dict = new_user.to_dict()
-        response= make_response(new_user_dict, 201)
+        response = make_response(new_user_dict, 201)
         return response
-        
-    
+
+# Client Search route
+class ClientSearch(Resource):
+    def get(self, query):
+        # Find all clients whose usernames start with the query
+        clients = Client.query.filter(Client.username.ilike(f"{query}%")).all()
+
+        if clients:
+            return make_response([client.to_dict() for client in clients], 200)
+        else:
+            return {'message': 'No clients found'}, 404
 
 # Register the resources
 api.add_resource(DocSignup, '/doc_signup')
 api.add_resource(DocLogin, '/doc_login')
 api.add_resource(ClientSignup, '/client_signup')
+api.add_resource(ClientSearch, '/client_search/<string:query>')
 
 # Run the server
 if __name__ == '__main__':
