@@ -100,6 +100,7 @@ class ClientSignup(Resource):
 
 # Client Search route
 class ClientSearch(Resource):
+    @jwt_required()
     def get(self, query):
         # Find all clients whose usernames start with the query
         clients = Client.query.filter(Client.username.ilike(f"{query}%")).all()
@@ -126,6 +127,18 @@ class Programs(Resource):
         response = make_response(new_program_dict, 201)
         return response
     
+#Expose client profile api
+class ClientProfile(Resource):
+    # @jwt_required()
+
+    def get(self, email):
+        client=Client.query.filter_by(email=email).first()
+        if client:
+            return make_response(client.to_dict(), 200)
+        else:
+            return {'message': 'Client not found'}, 404
+        
+    
         
 # Register the resources
 api.add_resource(DocSignup, '/doc_signup')
@@ -133,6 +146,7 @@ api.add_resource(DocLogin, '/doc_login')
 api.add_resource(ClientSignup, '/client_signup')
 api.add_resource(ClientSearch, '/client_search/<string:query>')
 api.add_resource(Programs, '/program')
+api.add_resource(ClientProfile, '/client_profile/<string:email>')
 
 
 
