@@ -51,3 +51,15 @@ class Client(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Client {self.id}, {self.username}, {self.email}, {self.phone_number}, {self.created_at}>'
     
+class Program(db.Model, SerializerMixin):
+    __tablename__='programs'
+    id=db.Column(db.Integer, primary_key=True)
+    name=db.Column(db.String, nullable=False, unique=True)
+    description=db.Column(db.String)
+    slogan=db.Column(db.String)
+    program_manager=db.Column(db.String)
+    created_at=db.Column(db.DateTime, server_default=db.func.now())
+
+    def repr__(self):
+        return f'<Program {self.id}, {self.name}, {self.description}, {self.created_at}>'
+    

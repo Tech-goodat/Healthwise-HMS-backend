@@ -4,7 +4,7 @@ from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 from flask_cors import CORS, cross_origin
 from flask_bcrypt import Bcrypt
-from models import db, Docs, Client
+from models import db, Docs, Client, Program
 import os
 
 app = Flask(__name__)
@@ -108,12 +108,35 @@ class ClientSearch(Resource):
             return make_response([client.to_dict() for client in clients], 200)
         else:
             return {'message': 'No clients found'}, 404
-
+        
+#create a program
+class Programs(Resource):
+    @jwt_required()
+    def post(self):
+        new_program = Program(
+            name=request.json['name'],
+            description=request.json['description'],
+            slogan=request.json['slogan'],
+            program_manager=request.json['program_manager'],
+        )
+        db.session.add(new_program)
+        db.session.commit()
+        
+        new_program_dict = new_program.to_dict()
+        response = make_response(new_program_dict, 201)
+        return response
+    
+        
 # Register the resources
 api.add_resource(DocSignup, '/doc_signup')
 api.add_resource(DocLogin, '/doc_login')
 api.add_resource(ClientSignup, '/client_signup')
 api.add_resource(ClientSearch, '/client_search/<string:query>')
+api.add_resource(Programs, '/program')
+
+
+
+        
 
 # Run the server
 if __name__ == '__main__':
