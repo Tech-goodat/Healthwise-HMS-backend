@@ -42,6 +42,19 @@ class Client(db.Model, SerializerMixin):
     age=db.Column(db.Integer)
     gender=db.Column(db.String)
     created_at=db.Column(db.DateTime, server_default=db.func.now())
+    date_of_birth=db.Column(db.String)
+    address=db.Column(db.String)
+    occupation=db.Column(db.String)
+    emergency_contact=db.Column(db.String)
+    primary_care_provider=db.Column(db.String)
+    insurance_provider=db.Column(db.String)
+    insurance_policy_number=db.Column(db.String)
+    allergies=db.Column(db.String)
+    medical_history=db.Column(db.String)
+    current_medications=db.Column(db.String)
+    family_medical_history=db.Column(db.String)
+
+
 
     @validates('email')
     def validate_email(self, key, email):
@@ -49,7 +62,7 @@ class Client(db.Model, SerializerMixin):
             raise ValueError('invail email address')
         return email
     def __repr__(self):
-        return f'<Client {self.id}, {self.username}, {self.email}, {self.phone_number}, {self.created_at}>'
+        return f'<Client {self.id}, {self.username}, {self.email}, {self.phone_number}, {self.age}, {self.gender}, {self.created_at}, {self.date_of_birth}, {self.address}, {self.occupation}, {self.emergency_contact}, {self.primary_care_provider}, {self.insurance_provider}, {self.insurance_policy_number}, {self.allergies}, {self.current_medications}, {self.medical_history}, {self.family_medical_history}>'
     
 class Program(db.Model, SerializerMixin):
     __tablename__='programs'

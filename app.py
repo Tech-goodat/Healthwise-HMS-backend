@@ -60,6 +60,7 @@ class DocLogin(Resource):
     def post(self):
         email = request.json['email']
         password = request.json['password']
+        
 
         doctor = Docs.query.filter_by(email=email).first()
 
@@ -72,6 +73,7 @@ class DocLogin(Resource):
 
         return make_response(jsonify(
             email=doctor.email,
+            username=doctor.username,
             department=doctor.department,
             description=doctor.description,
             phone_number=doctor.phone_number,
@@ -81,7 +83,7 @@ class DocLogin(Resource):
 
 # Client Signup route
 class ClientSignup(Resource):
-    @jwt_required()
+    # @jwt_required()
     def post(self):
         new_user = Client(
             username=request.json['username'],
@@ -89,6 +91,17 @@ class ClientSignup(Resource):
             phone_number=request.json['phone_number'],
             gender=request.json['gender'],
             age=request.json['age'],
+            date_of_birth=request.json['date_of_birth'],
+            address=request.json['address'],
+            occupation=request.json['occupation'],
+            emergency_contact=request.json['emergency_contact'],
+            primary_care_provider=request.json['primary_care_provider'],
+            insurance_provider=request.json['insurance_provider'],
+            insurance_policy_number=request.json['insurance_policy_number'],
+            allergies=request.json['allergies'],
+            current_medications=request.json['current_medications'],
+            medical_history=request.json['medical_history'],
+            family_medical_history=request.json['family_medical_history'],
         )
 
         db.session.add(new_user)
@@ -138,6 +151,13 @@ class ClientProfile(Resource):
         else:
             return {'message': 'Client not found'}, 404
         
+class GetClients(Resource):
+    # @jwt_required()
+    def get(self):
+        clients = Client.query.all()
+        return make_response([client.to_dict() for client in clients], 200)
+    
+        
     
         
 # Register the resources
@@ -147,6 +167,7 @@ api.add_resource(ClientSignup, '/client_signup')
 api.add_resource(ClientSearch, '/client_search/<string:query>')
 api.add_resource(Programs, '/program')
 api.add_resource(ClientProfile, '/client_profile/<string:email>')
+api.add_resource(GetClients, '/clients')
 
 
 
