@@ -83,7 +83,7 @@ class DocLogin(Resource):
 
 # Client Signup route
 class ClientSignup(Resource):
-    # @jwt_required()
+    @cross_origin()
     def post(self):
         new_user = Client(
             username=request.json['username'],
@@ -113,7 +113,7 @@ class ClientSignup(Resource):
 
 # Client Search route
 class ClientSearch(Resource):
-    # @jwt_required()
+    @cross_origin()
     def get(self, query):
         # Find all clients whose usernames start with the query
         clients = Client.query.filter(Client.username.ilike(f"{query}%")).all()
@@ -125,7 +125,7 @@ class ClientSearch(Resource):
         
 #create a program
 class Programs(Resource):
-    @jwt_required()
+    @cross_origin()
     def post(self):
         new_program = Program(
             name=request.json['name'],
@@ -142,7 +142,7 @@ class Programs(Resource):
     
 #Expose client profile api
 class ClientProfile(Resource):
-    # @jwt_required()
+    @cross_origin()
 
     def get(self, email):
         client=Client.query.filter_by(email=email).first()
@@ -152,12 +152,19 @@ class ClientProfile(Resource):
             return {'message': 'Client not found'}, 404
         
 class GetClients(Resource):
-    # @jwt_required()
+    @cross_origin()
     def get(self):
         clients = Client.query.all()
         return make_response([client.to_dict() for client in clients], 200)
-    
-        
+
+class ClientProfileById(Resource):
+    @cross_origin()
+    def get(self, id):
+        client = Client.query.get(id)
+        if client:
+            return make_response(client.to_dict(), 200)
+        else:
+            return {'message': 'Client not found'}, 404
     
         
 # Register the resources
@@ -168,6 +175,7 @@ api.add_resource(ClientSearch, '/client_search/<string:query>')
 api.add_resource(Programs, '/program')
 api.add_resource(ClientProfile, '/client_profile/<string:email>')
 api.add_resource(GetClients, '/clients')
+api.add_resource(ClientProfileById, '/client_profile_by_id/<int:id>')
 
 
 
