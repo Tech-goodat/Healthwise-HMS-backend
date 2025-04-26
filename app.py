@@ -113,7 +113,7 @@ class ClientSignup(Resource):
 
 # Client Search route
 class ClientSearch(Resource):
-    @jwt_required()
+    # @jwt_required()
     def get(self, query):
         # Find all clients whose usernames start with the query
         clients = Client.query.filter(Client.username.ilike(f"{query}%")).all()
@@ -142,7 +142,7 @@ class Programs(Resource):
     
 #Expose client profile api
 class ClientProfile(Resource):
-    @jwt_required()
+    # @jwt_required()
 
     def get(self, email):
         client=Client.query.filter_by(email=email).first()
