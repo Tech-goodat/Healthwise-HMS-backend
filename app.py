@@ -45,6 +45,9 @@ class DocSignup(Resource):
             password=bcrypt.generate_password_hash(request.json['password']).decode('utf-8')
         )
 
+        if not new_user.username or not new_user.email or not new_user.department or not new_user.description or not new_user.phone_number or not new_user.profile_picture or not new_user.password:
+            return jsonify({'error': 'Missing required fields'}), 400
+
         db.session.add(new_user)
         db.session.commit()
 
