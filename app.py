@@ -161,6 +161,16 @@ class Programs(Resource):
         response = make_response(new_program_dict, 201)
         return response
     
+
+class GetPrograms(Resource):
+    # @jwt_required()
+    def get(self):
+        programs = Program.query.all()
+        return make_response([program.to_dict() for program in programs], 200)
+
+# Register the resource
+api.add_resource(GetPrograms, '/programs')
+
 #Expose client profile api
 class ClientProfile(Resource):
     # @jwt_required()
@@ -198,6 +208,7 @@ api.add_resource(ClientProfile, '/client_profile/<string:email>')
 api.add_resource(GetClients, '/clients')
 api.add_resource(ClientProfileById, '/client_profile_by_id/<int:id>')
 api.add_resource(ClientDelete, '/client_delete/<int:id>')
+api.add_resource(GetPrograms, '/programs')
 
 
 
