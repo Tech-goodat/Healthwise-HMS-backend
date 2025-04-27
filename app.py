@@ -115,16 +115,22 @@ class ClientSignup(Resource):
         return response
     
 class ClientDelete(Resource):
-    # @jwt_required()
     def delete(self, id):
         client = Client.query.get(id)
         
         if client:
-            db.session.delete(client)
-            db.session.commit()
-            return {'message': 'Client successfully deleted'}, 200
+            try:
+                db.session.delete(client)
+                db.session.commit()
+                print(f"Client {id} successfully deleted")
+                return {'message': 'Client successfully deleted'}, 200
+            except Exception as e:
+                db.session.rollback()
+                print(f"Error deleting client {id}: {str(e)}")
+                return {'message': f'Error: {str(e)}'}, 500
         else:
             return {'message': 'Client not found'}, 404
+
 
 # Client Search route
 class ClientSearch(Resource):
