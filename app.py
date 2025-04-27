@@ -110,6 +110,18 @@ class ClientSignup(Resource):
         new_user_dict = new_user.to_dict()
         response = make_response(new_user_dict, 201)
         return response
+    
+class ClientDelete(Resource):
+    # @jwt_required()
+    def delete(self, id):
+        client = Client.query.get(id)
+        
+        if client:
+            db.session.delete(client)
+            db.session.commit()
+            return {'message': 'Client successfully deleted'}, 200
+        else:
+            return {'message': 'Client not found'}, 404
 
 # Client Search route
 class ClientSearch(Resource):
@@ -176,6 +188,7 @@ api.add_resource(Programs, '/program')
 api.add_resource(ClientProfile, '/client_profile/<string:email>')
 api.add_resource(GetClients, '/clients')
 api.add_resource(ClientProfileById, '/client_profile_by_id/<int:id>')
+api.add_resource(ClientDelete, '/client_delete/<int:id>')
 
 
 
