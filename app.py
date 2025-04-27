@@ -168,8 +168,7 @@ class GetPrograms(Resource):
         programs = Program.query.all()
         return make_response([program.to_dict() for program in programs], 200)
 
-# Register the resource
-api.add_resource(GetPrograms, '/programs')
+
 
 #Expose client profile api
 class ClientProfile(Resource):
