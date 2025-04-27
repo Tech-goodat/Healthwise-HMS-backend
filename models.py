@@ -72,7 +72,9 @@ class Program(db.Model, SerializerMixin):
     slogan=db.Column(db.String)
     program_manager=db.Column(db.String)
     created_at=db.Column(db.DateTime, server_default=db.func.now())
+    target_audience=db.Column(db.String)
+    program_type=db.Column(db.String)
+    contact_email=db.Column(db.String)
 
-    def repr__(self):
-        return f'<Program {self.id}, {self.name}, {self.description}, {self.created_at}>'
-    
+    def __repr__(self):
+        return f'<Program {self.id}, {self.name}, {self.description}, {self.slogan}, {self.program_manager}, {self.created_at}, {self.target_audience}, {self.program_type}, {self.contact_email}>'

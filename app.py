@@ -153,6 +153,9 @@ class Programs(Resource):
             description=request.json['description'],
             slogan=request.json['slogan'],
             program_manager=request.json['program_manager'],
+            target_audience=request.json['target_audience'],
+            program_type=request.json['program_type'],
+            contact_email=request.json['contact_email'],
         )
         db.session.add(new_program)
         db.session.commit()
